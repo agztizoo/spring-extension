@@ -13,4 +13,9 @@ public class ProductA implements Product {
         return "ProductA";
     }
 
+    @Override
+    public String getPropertyValue() {
+        return "No property";
+    }
+
 }

@@ -3,12 +3,15 @@
  */
 package com.github.jieshaocd.beans.factory.xml;
 
+import java.lang.reflect.Method;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.HashSet;
+import java.util.Iterator;
 import java.util.List;
 import java.util.Set;
 
+import org.springframework.beans.PropertyValue;
 import org.springframework.beans.factory.NoSuchBeanDefinitionException;
 import org.springframework.beans.factory.config.BeanDefinition;
 import org.springframework.beans.factory.config.BeanDefinitionHolder;
@@ -16,7 +19,6 @@ import org.springframework.beans.factory.support.AbstractBeanDefinition;
 import org.springframework.beans.factory.support.BeanDefinitionReaderUtils;
 import org.springframework.beans.factory.xml.BeanDefinitionParserDelegate;
 import org.springframework.beans.factory.xml.XmlReaderContext;
-import org.springframework.core.env.Environment;
 import org.springframework.util.CollectionUtils;
 import org.springframework.util.StringUtils;
 import org.w3c.dom.Element;
@@ -35,8 +37,8 @@ public class CustomizedBeanDefinitionParserDelegate extends BeanDefinitionParser
      * @param readerContext
      * @param environment
      */
-    public CustomizedBeanDefinitionParserDelegate(XmlReaderContext readerContext, Environment environment) {
-        super(readerContext, environment);
+    public CustomizedBeanDefinitionParserDelegate(XmlReaderContext readerContext) {
+        super(readerContext);
     }
 
     @Override
@@ -146,17 +148,43 @@ public class CustomizedBeanDefinitionParserDelegate extends BeanDefinitionParser
             AbstractBeanDefinition oldBean, String beanName, Element ele) {
         int curOrder = getOverrideOrderFromBeanDefinition(curBean);
         int oldOrder = getOverrideOrderFromBeanDefinition(oldBean);
+        AbstractBeanDefinition def = null;
         if (curOrder == oldOrder) {
             //conflict
             error("Bean name '" + beanName + "' is already used in this <beans> element", ele);
         } else if (curOrder < oldOrder) {
             curBean.overrideFrom(oldBean);
-            return curBean;
+            def = curBean;
         } else {
             oldBean.overrideFrom(curBean);
-            return oldBean;
+            def = oldBean;
         }
-        return null;
+        try {
+            List<PropertyValue> pvs = def.getPropertyValues().getPropertyValueList();
+            Class<?> clazz = getClass().getClassLoader().loadClass(def.getBeanClassName());
+            Method[] methods = clazz.getDeclaredMethods();
+            for (Iterator<PropertyValue> itor = pvs.iterator(); itor.hasNext();) {
+                PropertyValue pv = itor.next();
+                StringBuilder name = new StringBuilder(64);
+                name.append("set");
+                name.append(Character.toUpperCase(pv.getName().charAt(0)));
+                name.append(pv.getName().substring(1));
+                boolean exists = false;
+                for (Method method : methods) {
+                    if (method.getName().equals(name.toString())) {
+                        exists = true;
+                        break;
+                    }
+                }
+                if (!exists) {
+                    itor.remove();
+                }
+                System.out.println(name.toString());
+            }
+        } catch (Exception e) {
+            error("class not found:" + beanName, ele);
+        }
+        return def;
     }
 
     protected int getOverrideOrderFromBeanDefinition(AbstractBeanDefinition beanDefinition) {

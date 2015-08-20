@@ -9,8 +9,23 @@ package com.github.jieshaocd.example.xml;
  */
 public class ProductB extends ProductA {
 
+    private Property property;
+
     public String getId() {
         return "ProductB";
+    }
+
+    @Override
+    public String getPropertyValue() {
+        return getProperty().getPropertyName();
+    }
+
+    public Property getProperty() {
+        return property;
+    }
+
+    public void setProperty(Property property) {
+        this.property = property;
     }
 
 }

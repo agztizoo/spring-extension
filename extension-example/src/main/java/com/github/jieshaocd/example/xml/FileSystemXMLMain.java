@@ -19,6 +19,7 @@ public class FileSystemXMLMain {
                 new CustomizedFileSystemXmlApplicationContext("classpath:applicationContext.xml");
         Product product = (Product) contenxt.getBean("product");
         System.out.println(product.getId());
+        System.out.println(product.getPropertyValue());
     }
 
 }
