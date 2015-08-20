@@ -179,7 +179,6 @@ public class CustomizedBeanDefinitionParserDelegate extends BeanDefinitionParser
                 if (!exists) {
                     itor.remove();
                 }
-                System.out.println(name.toString());
             }
         } catch (Exception e) {
             error("class not found:" + beanName, ele);
