@@ -161,7 +161,8 @@ public class CustomizedBeanDefinitionParserDelegate extends BeanDefinitionParser
         }
         try {
             List<PropertyValue> pvs = def.getPropertyValues().getPropertyValueList();
-            Class<?> clazz = getClass().getClassLoader().loadClass(def.getBeanClassName());
+            Class<?> clazz =
+                    getReaderContext().getBeanClassLoader().loadClass(def.getBeanClassName());
             Method[] methods = clazz.getDeclaredMethods();
             for (Iterator<PropertyValue> itor = pvs.iterator(); itor.hasNext();) {
                 PropertyValue pv = itor.next();

@@ -1,0 +1,47 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+
+<xsd:schema xmlns="http://github.com/jieshaocd/schema/pipeline"
+	xmlns:xsd="http://www.w3.org/2001/XMLSchema" targetNamespace="http://github.com/jieshaocd/schema/pipeline"
+	elementFormDefault="qualified" attributeFormDefault="unqualified">
+	
+	<xsd:import namespace="http://www.springframework.org/schema/beans"/>
+
+	<xsd:annotation>
+		<xsd:documentation><![CDATA[
+	Defines the configuration elements for pipeline support.
+		]]></xsd:documentation>
+	</xsd:annotation>
+
+	<xsd:element name="chain">
+		<xsd:complexType>
+			<xsd:sequence>
+			    <xsd:choice minOccurs="1" maxOccurs="unbounded">
+			        <xsd:element ref="handler"></xsd:element>
+			    </xsd:choice>
+			</xsd:sequence>
+		    <xsd:attribute name="id" type="xsd:string" use="required"></xsd:attribute>
+			<xsd:attribute name="header" type="xsd:string" use="required"></xsd:attribute>
+			<xsd:attribute name="class" type="xsd:string"></xsd:attribute>
+		</xsd:complexType>
+	</xsd:element>
+	
+    <xsd:element name="handler">
+		<xsd:complexType>
+		    <xsd:sequence>
+		        <xsd:choice minOccurs="0" maxOccurs="unbounded">
+		           <xsd:element ref="next"></xsd:element>
+		        </xsd:choice>
+		    </xsd:sequence>
+			<xsd:attribute name="id" type="xsd:string" use="required"></xsd:attribute>
+			<xsd:attribute name="ref" type="xsd:string" use="required"></xsd:attribute>
+		</xsd:complexType>
+	</xsd:element>
+	
+	<xsd:element name="next">
+		<xsd:complexType>
+			<xsd:attribute name="key" type="xsd:int" use="required"></xsd:attribute>
+			<xsd:attribute name="refid" type="xsd:string" use="required"></xsd:attribute>
+		</xsd:complexType>
+	</xsd:element>
+
+</xsd:schema>
