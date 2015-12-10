@@ -28,10 +28,21 @@ public class PipelineHandlerContext {
         this.handler = handler;
     }
 
+    /**
+     * 执行具体的Handler，并根据返回结果选择下一个Handler
+     * 
+     * @param params
+     */
     public void execute(Map<String, Object> params) {
         int result = handler.execute(params);
         if (CollectionUtils.isEmpty(nextHandlers)) {
             return;
+        }
+        if (result == PipelineHandlerAdaptor.STOP_AND_COMMIT) {
+            return;
+        }
+        if (result == PipelineHandlerAdaptor.STOP_AND_ERROR) {
+            throw new PipelineException("Rollback pipeline by: " + handlerId);
         }
         PipelineHandlerContext nextHandler = nextHandlers.get(String.valueOf(result));
         if (nextHandler == null) {

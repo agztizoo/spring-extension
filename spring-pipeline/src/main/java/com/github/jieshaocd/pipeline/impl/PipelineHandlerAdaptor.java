@@ -13,9 +13,15 @@ import com.github.jieshaocd.pipeline.PipelineHandler;
  */
 public class PipelineHandlerAdaptor implements PipelineHandler {
 
+    public static final int STOP_AND_COMMIT = 0;
+
+    public static final int STOP_AND_ERROR  = -1;
+
+    public static final int SUCCESS         = 1;
+
     @Override
     public int execute(Map<String, Object> params) {
-        return 0;
+        return STOP_AND_COMMIT;
     }
 
 }

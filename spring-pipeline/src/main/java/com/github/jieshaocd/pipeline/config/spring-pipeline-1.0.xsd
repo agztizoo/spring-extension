@@ -33,14 +33,14 @@
 		        </xsd:choice>
 		    </xsd:sequence>
 			<xsd:attribute name="id" type="xsd:string" use="required"></xsd:attribute>
-			<xsd:attribute name="ref" type="xsd:string" use="required"></xsd:attribute>
+			<xsd:attribute name="bean" type="xsd:string" use="required"></xsd:attribute>
 		</xsd:complexType>
 	</xsd:element>
 	
 	<xsd:element name="next">
 		<xsd:complexType>
-			<xsd:attribute name="key" type="xsd:int" use="required"></xsd:attribute>
-			<xsd:attribute name="refid" type="xsd:string" use="required"></xsd:attribute>
+			<xsd:attribute name="returnvalue" type="xsd:int" use="required"></xsd:attribute>
+			<xsd:attribute name="handler" type="xsd:string" use="required"></xsd:attribute>
 		</xsd:complexType>
 	</xsd:element>
 
