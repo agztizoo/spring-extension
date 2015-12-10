@@ -14,10 +14,10 @@
     <bean id="postCheckBean" class="com.github.jieshaocd.handler.PostCheckHandler"></bean>
 
     <pipeline:chain id="checkPipeline" header="preCheck">
-        <pipeline:handler id="preCheck" ref="preCheckBean">
-            <pipeline:next key="1" refid="postCheck"/>
+        <pipeline:handler id="preCheck" bean="preCheckBean">
+            <pipeline:next returnvalue="1" handler="postCheck"/>
         </pipeline:handler>
-        <pipeline:handler id="postCheck" ref="postCheckBean"/>
+        <pipeline:handler id="postCheck" bean="postCheckBean"/>
     </pipeline:chain>
     
 </beans>
